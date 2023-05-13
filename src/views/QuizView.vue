@@ -1,7 +1,9 @@
 <template>
-    <QuestionHeader />
+    <QuestionHeader :header="questionHeader" :barPercentage="barPercentage" />
     <div>
-        <QuestionVue :currentQuestion="quiz.questions[currentQuestionIndex]"/>
+        {{ quiz.questions[currentQuestionIndex] }}
+        <QuestionVue :currentQuestion="quiz.questions[currentQuestionIndex]"
+         @optionSelected="clickOnSelect" />
     </div>
 </template>
 
@@ -10,11 +12,24 @@ import { useRoute } from 'vue-router';
 import QuestionVue from '../components/Question.vue';
 import QuestionHeader from '../components/QuestionHeader.vue';
 import quizQuestion from '../../data/quizes.json'
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 const route = useRoute()
 const id = parseInt(route.params.id)
 const quiz = quizQuestion.find(q => q.id === id)
-const currentQuestionIndex = ref(0)
+let currentQuestionIndex = ref(0)
+const numberOfCorrectAnswer = ref(0)
+
+// for Header 1/2 Questions
+const questionHeader = computed(() => `${currentQuestionIndex.value} / ${quiz.questions.length}`)
+// Status Bar Value Calculating
+const barPercentage = computed(() => `${currentQuestionIndex.value / quiz.questions.length * 100}%`)
+// For counting correct Answer
+const clickOnSelect = (isCorrect) => {
+    if (isCorrect) {
+        numberOfCorrectAnswer.value++
+    }
+    currentQuestionIndex.value++
+}
 </script>
 
 <style>
