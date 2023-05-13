@@ -1,15 +1,16 @@
 <script setup>
-import { defineProps } from 'vue';
-const {data} = defineProps(['data'])
+
+const { data } = defineProps(['data'])
+
 </script>
 <template>
-    <div class="card">
-        <img :src="data.img" alt="">
-        <div class="card-text">
-            <h2>{{ data.name }}</h2>
-            <p>{{ data.questions.length }} questions</p>
-        </div>
+  <div class="card">
+    <img :src="data.img" alt="">
+    <div class="card-text">
+      <h2>{{ data.name }}</h2>
+      <p>{{ data.questions.length }} questions</p>
     </div>
+  </div>
 </template>
 <style scoped>
 .card {
@@ -34,4 +35,5 @@ const {data} = defineProps(['data'])
 
 .card-text h2 {
   font-weight: bold;
-}</style>
+}
+</style>
