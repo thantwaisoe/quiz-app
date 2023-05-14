@@ -1,16 +1,17 @@
 <template>
     <QuestionHeader :header="questionHeader" :barPercentage="barPercentage" />
-    <div>
-        {{ quiz.questions[currentQuestionIndex] }}
-        <QuestionVue :currentQuestion="quiz.questions[currentQuestionIndex]"
+    <div v-if="!showResult">
+        <QuestionVue :currentQuestion="quiz.questions"
          @optionSelected="clickOnSelect" />
     </div>
+    <Result v-else :correctAnsCount="numberOfCorrectAnswer" :totalAnsCount="quiz.questions.length"/>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router';
 import QuestionVue from '../components/Question.vue';
 import QuestionHeader from '../components/QuestionHeader.vue';
+import Result from '../components/Result.vue'
 import quizQuestion from '../../data/quizes.json'
 import { computed, ref } from 'vue';
 const route = useRoute()
@@ -18,6 +19,7 @@ const id = parseInt(route.params.id)
 const quiz = quizQuestion.find(q => q.id === id)
 let currentQuestionIndex = ref(0)
 const numberOfCorrectAnswer = ref(0)
+let showResult = ref(false)
 
 // for Header 1/2 Questions
 const questionHeader = computed(() => `${currentQuestionIndex.value} / ${quiz.questions.length}`)
@@ -29,6 +31,9 @@ const clickOnSelect = (isCorrect) => {
         numberOfCorrectAnswer.value++
     }
     currentQuestionIndex.value++
+    if(currentQuestionIndex.value  === quiz.questions.length ){
+        showResult.value =true
+    }
 }
 </script>
 
